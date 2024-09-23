@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -10,15 +11,15 @@ export default function Home() {
       </div>
       
       <nav className="flex flex-col space-y-4">
-        <a href="#" className="px-6 py-3 bg-white shadow-md rounded-lg hover:bg-gray-100 transition">
+        <Link href="/" className="px-6 py-3 bg-white shadow-md rounded-lg hover:bg-gray-100 transition">
           To Do
-        </a>
-        <a href="#" className="px-6 py-3 bg-white shadow-md rounded-lg hover:bg-gray-100 transition">
+        </Link>
+        <Link href="/tasks" className="px-6 py-3 bg-white shadow-md rounded-lg hover:bg-gray-100 transition">
           Task
-        </a>
-        <a href="#" className="px-6 py-3 bg-white shadow-md rounded-lg hover:bg-gray-100 transition">
+        </Link>
+        <Link href="/not-todo" className="px-6 py-3 bg-white shadow-md rounded-lg hover:bg-gray-100 transition">
           Not To Do
-        </a>
+        </Link>
       </nav>
     </div>
   );
