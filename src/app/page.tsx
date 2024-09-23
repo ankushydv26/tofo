@@ -11,10 +11,10 @@ export default function Home() {
       </div>
       
       <nav className="flex flex-col space-y-4">
-        <Link href="/" className="px-6 py-3 bg-white shadow-md rounded-lg hover:bg-gray-100 transition">
+        <Link href="/dashboard" className="px-6 py-3 bg-white shadow-md rounded-lg hover:bg-gray-100 transition">
           To Do
         </Link>
-        <Link href="/tasks" className="px-6 py-3 bg-white shadow-md rounded-lg hover:bg-gray-100 transition">
+        <Link href="/task" className="px-6 py-3 bg-white shadow-md rounded-lg hover:bg-gray-100 transition">
           Task
         </Link>
         <Link href="/not-todo" className="px-6 py-3 bg-white shadow-md rounded-lg hover:bg-gray-100 transition">
