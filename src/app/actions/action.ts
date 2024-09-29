@@ -26,15 +26,22 @@ const addPost = async (post: FormData) => {
 
 // Get posts
 const getPosts = async () => {
-  try {
-    await dbConnect();  // Ensure MongoDB connection is established
-
-    const posts = await Post.find().lean();  // Use `lean()` to get plain JS objects
-    return posts;
-  } catch (error) {
-    console.error('Error fetching posts:', error);
-    return [];
-  }
+  const posts = await Post.find();
+  // Ensure that each post's _id is converted to a string
+  return posts.map(post => ({
+    _id: post._id.toString(), // Convert _id to string
+    title: post.title,
+    done: post.done,
+  }));
 };
 
-export { addPost, getPosts };
+const markPostAsDone = async (id: string) => {
+  const post = await Post.findByIdAndUpdate(id, { done: true }, { new: true });
+  return {
+    _id: post._id.toString(),
+    title: post.title,
+    done: post.done,
+  };
+};
+
+export { addPost, getPosts , markPostAsDone};
