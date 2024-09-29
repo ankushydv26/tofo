@@ -1,13 +1,15 @@
+// components/Dashboard.tsx
 'use client'; // Ensure this component is a Client Component
 
 import { useState, useEffect } from 'react';
-import { addPost, getPosts } from '../actions/action';
+import { addPost, getPosts, markPostAsDone } from '../actions/action';
+
 
 interface Post {
+  _id: string; // Assuming each post has a unique ID
   title: string;
   done: boolean;
 }
-
 const Dashboard = () => {
   const [task, setTask] = useState('');
   const [posts, setPosts] = useState<Post[]>([]);
@@ -20,8 +22,7 @@ const Dashboard = () => {
     formData.append('title', task);
 
     try {
-      const result = await addPost(formData);
-      console.log(result.message); // Log success message
+      await addPost(formData);
       setTask(''); // Clear the input field after submission
       fetchPosts(); // Re-fetch posts after adding a new one
     } catch (error) {
@@ -35,16 +36,22 @@ const Dashboard = () => {
     setError(null); // Reset error state
     try {
       const fetchedPosts = await getPosts();
-      const formattedPosts: Post[] = fetchedPosts.map(post => ({
-        title: post.title, // Ensure this matches your actual data structure
-        done: post.done, // Ensure this matches your actual data structure
-      }));
-      setPosts(formattedPosts);
+      setPosts(fetchedPosts);
     } catch (error) {
       console.error('Error fetching posts:', error);
       setError('Error fetching posts. Please try again.'); // Set error message
     } finally {
       setLoading(false); // End loading
+    }
+  };
+
+  const handleMarkAsDone = async (id: string) => {
+    try {
+      await markPostAsDone(id);
+      fetchPosts(); // Re-fetch posts to update the UI
+    } catch (error) {
+      console.error('Error marking post as done:', error);
+      setError('Error marking post as done. Please try again.'); // Set error message
     }
   };
 
@@ -83,10 +90,13 @@ const Dashboard = () => {
       <h2 className="text-lg font-semibold mt-4">Current Tasks</h2>
       <ul className="space-y-2 mt-2">
         {posts.length > 0 ? (
-          posts.map((post, index) => (
-            <li key={index} className="flex justify-between p-2 border border-gray-200 rounded-md">
+          posts.map((post) => (
+            <li key={post._id} className="flex justify-between p-2 border border-gray-200 rounded-md">
               <span>{post.title}</span>
-              <span className={`${post.done ? 'text-green-500' : 'text-red-500'}`}>
+              <span
+                onClick={() => handleMarkAsDone(post._id)} // Handle click to mark as done
+                className={`cursor-pointer ${post.done ? 'text-green-500' : 'text-red-500'}`}
+              >
                 {post.done ? '✓' : '✗'}
               </span>
             </li>
