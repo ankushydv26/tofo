@@ -35,7 +35,11 @@ const Dashboard = () => {
     setError(null); // Reset error state
     try {
       const fetchedPosts = await getPosts();
-      setPosts(fetchedPosts);
+      const formattedPosts: Post[] = fetchedPosts.map(post => ({
+        title: post.title, // Ensure this matches your actual data structure
+        done: post.done, // Ensure this matches your actual data structure
+      }));
+      setPosts(formattedPosts);
     } catch (error) {
       console.error('Error fetching posts:', error);
       setError('Error fetching posts. Please try again.'); // Set error message
