@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 
-type SpeechRecognitionType = typeof window.SpeechRecognition | typeof window.webkitSpeechRecognition;
+// type SpeechRecognitionType = typeof window.SpeechRecognition | typeof window.webkitSpeechRecognition;
 
 const useSpeechRecognition = () => {
   const [transcript, setTranscript] = useState<string>('');
@@ -10,7 +10,7 @@ const useSpeechRecognition = () => {
 
   useEffect(() => {
     const SpeechRecognition =
-      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      (window).SpeechRecognition || (window).webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
       setError('Speech Recognition API not supported in this browser.');

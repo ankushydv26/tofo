@@ -3,7 +3,6 @@
 
 import { useState, useEffect } from 'react';
 import { addPost, getPosts, markPostAsDone } from '../actions/action';
-import Dictaphone from "../Component/speechrecognition"
 
 
 interface Post {
@@ -106,6 +105,7 @@ const Dashboard = () => {
           <p className="text-center text-gray-500">No tasks found.</p>
         )}
       </ul>
+      
     </div>
   );
 };
