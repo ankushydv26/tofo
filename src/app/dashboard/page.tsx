@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import { addPost, getPosts, markPostAsDone } from '../actions/action';
+import Dictaphone from "../Component/speechrecognition"
 
 
 interface Post {
