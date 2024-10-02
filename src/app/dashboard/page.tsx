@@ -26,7 +26,7 @@ const Dashboard = () => {
       setTask(''); // Clear the input field after submission
       fetchPosts(); // Re-fetch posts after adding a new one
     } catch (error) {
-      // console.error('Error submitting form:', error);
+      console.error('Error submitting form:', error);
       setError('Error submitting the task. Please try again.'); // Set error message
     }
   };
@@ -38,7 +38,7 @@ const Dashboard = () => {
       const fetchedPosts = await getPosts();
       setPosts(fetchedPosts);
     } catch (error) {
-      // console.error('Error fetching posts:', error);
+      console.error('Error fetching posts:', error);
       setError('Error fetching posts. Please try again.'); // Set error message
     } finally {
       setLoading(false); // End loading
@@ -50,7 +50,7 @@ const Dashboard = () => {
       await markPostAsDone(id);
       fetchPosts(); // Re-fetch posts to update the UI
     } catch (error) {
-      // console.error('Error marking post as done:', error);
+      console.error('Error marking post as done:', error);
       setError('Error marking post as done. Please try again.'); // Set error message
     }
   };
