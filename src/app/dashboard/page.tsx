@@ -26,7 +26,7 @@ const Dashboard = () => {
       setTask(''); // Clear the input field after submission
       fetchPosts(); // Re-fetch posts after adding a new one
     } catch (error) {
-      console.error('Error submitting form:', error);
+      // console.error('Error submitting form:', error);
       setError('Error submitting the task. Please try again.'); // Set error message
     }
   };
@@ -38,7 +38,7 @@ const Dashboard = () => {
       const fetchedPosts = await getPosts();
       setPosts(fetchedPosts);
     } catch (error) {
-      console.error('Error fetching posts:', error);
+      // console.error('Error fetching posts:', error);
       setError('Error fetching posts. Please try again.'); // Set error message
     } finally {
       setLoading(false); // End loading
@@ -50,7 +50,7 @@ const Dashboard = () => {
       await markPostAsDone(id);
       fetchPosts(); // Re-fetch posts to update the UI
     } catch (error) {
-      console.error('Error marking post as done:', error);
+      // console.error('Error marking post as done:', error);
       setError('Error marking post as done. Please try again.'); // Set error message
     }
   };
@@ -89,15 +89,15 @@ const Dashboard = () => {
 
       <h2 className="text-lg font-semibold mt-4">Current Tasks</h2>
       <ul className="space-y-2 mt-2">
-        {posts.length > 0 ? (
-          posts.map((post) => (
-            <li key={post._id} className="flex justify-between p-2 border border-gray-200 rounded-md">
-              <span>{post.title}</span>
+        {posts?.length > 0 ? (
+          posts?.map((post) => (
+            <li key={post?._id} className="flex justify-between p-2 border border-gray-200 rounded-md">
+              <span>{post?.title}</span>
               <span
-                onClick={() => handleMarkAsDone(post._id)} // Handle click to mark as done
-                className={`cursor-pointer ${post.done ? 'text-green-500' : 'text-red-500'}`}
+                onClick={() => handleMarkAsDone(post?._id)} // Handle click to mark as done
+                className={`cursor-pointer ${post?.done ? 'text-green-500' : 'text-red-500'}`}
               >
-                {post.done ? '✓' : '✗'}
+                {post?.done ? '✓' : '✗'}
               </span>
             </li>
           ))
