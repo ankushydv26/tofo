@@ -4,9 +4,12 @@ import { useState, useEffect, useRef } from 'react';
 
 const useSpeechRecognition = () => {
   const [transcript, setTranscript] = useState<string>('');
+  const [saveText , getSaveText] = useState<string[]>([])
   const [isListening, setIsListening] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
+
+  console.log(saveText)
 
   useEffect(() => {
     const SpeechRecognition =
@@ -33,14 +36,17 @@ const useSpeechRecognition = () => {
     };
 
     recognition.onresult = (event: SpeechRecognitionEvent) => {
-      let finalTranscript = '';
+      let finalTranscript:any = '';
       for (let i = 0; i < event.results.length; i++) {
         const transcriptChunk = event.results[i][0].transcript;
         if (event.results[i].isFinal) {
           finalTranscript += transcriptChunk;
         }
       }
-      setTranscript((prev) => prev + finalTranscript);
+      setTranscript((prev) => (prev + finalTranscript));
+      if(finalTranscript !== '')
+          getSaveText(prev => [...prev , finalTranscript])
+
     };
 
     recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
@@ -65,7 +71,7 @@ const useSpeechRecognition = () => {
     }
   };
 
-  return { transcript, isListening, error, startListening, stopListening };
+  return { transcript, isListening, error, startListening, stopListening  ,saveText};
 };
 
 export default useSpeechRecognition;
