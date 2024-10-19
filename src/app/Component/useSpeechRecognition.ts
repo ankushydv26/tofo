@@ -36,7 +36,7 @@ const useSpeechRecognition = () => {
     };
 
     recognition.onresult = (event: SpeechRecognitionEvent) => {
-      let finalTranscript:any = '';
+      let finalTranscript:string = '';
       for (let i = 0; i < event.results.length; i++) {
         const transcriptChunk = event.results[i][0].transcript;
         if (event.results[i].isFinal) {
