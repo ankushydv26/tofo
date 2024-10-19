@@ -24,6 +24,22 @@ const addPost = async (post: FormData) => {
   }
 };
 
+const deletePost = async (id: string) => {
+  try {
+    await dbConnect();  // Ensure MongoDB connection is established
+    const deletedPost = await Post.findByIdAndDelete(id);
+
+    if (!deletedPost) {
+      throw new Error('Post not found');
+    }
+
+    return { success: true, message: 'Post deleted successfully' };
+  } catch (error) {
+    console.error('Error deleting post:', error);
+    return { success: false, message: 'Failed to delete post' };
+  }
+};
+
 // Get posts
 const getPosts = async () => {
   const posts = await Post.find();
@@ -44,4 +60,4 @@ const markPostAsDone = async (id: string) => {
   };
 };
 
-export { addPost, getPosts , markPostAsDone};
+export { addPost, getPosts , markPostAsDone , deletePost};

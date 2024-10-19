@@ -2,7 +2,7 @@
 'use client'; // Ensure this component is a Client Component
 
 import { useState, useEffect } from 'react';
-import { addPost, getPosts, markPostAsDone } from '../actions/action';
+import { addPost, getPosts, markPostAsDone , deletePost } from '../actions/action';
 
 
 interface Post {
@@ -28,6 +28,16 @@ const Dashboard = () => {
     } catch (error) {
       console.error('Error submitting form:', error);
       setError('Error submitting the task. Please try again.'); // Set error message
+    }
+  };
+
+  const handleDeletePost = async (id: string) => {
+    try {
+      await deletePost(id);
+      fetchPosts();  // Refresh posts after deletion
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      setError('Error deleting post. Please try again.');
     }
   };
 
@@ -99,6 +109,12 @@ const Dashboard = () => {
               >
                 {post?.done ? '✓' : '✗'}
               </span>
+              <button
+                  onClick={() => handleDeletePost(post._id)}  // Handle delete action
+                  className="text-red-500 hover:text-red-700 transition duration-200"
+                >
+                  Delete
+                </button>
             </li>
           ))
         ) : (
