@@ -2,7 +2,8 @@
 'use client'; // Ensure this component is a Client Component
 
 import { useState, useEffect } from 'react';
-import { addPost, getPosts, markPostAsDone , deletePost } from '../actions/action';
+import { addPost, getPosts, markPostAsDone, deletePost } from '../actions/action';
+import Loader from '../Component/Loader/loader'
 
 
 interface Post {
@@ -17,6 +18,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState<boolean>(true); // State for loading
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setLoading(true)
     e.preventDefault();
     const formData = new FormData();
     formData.append('title', task);
@@ -24,7 +26,9 @@ const Dashboard = () => {
     try {
       await addPost(formData);
       setTask(''); // Clear the input field after submission
-      fetchPosts(); // Re-fetch posts after adding a new one
+      fetchPosts();
+      setLoading(false)
+      // Re-fetch posts after adding a new one
     } catch (error) {
       console.error('Error submitting form:', error);
       setError('Error submitting the task. Please try again.'); // Set error message
@@ -47,6 +51,7 @@ const Dashboard = () => {
     try {
       const fetchedPosts = await getPosts();
       setPosts(fetchedPosts);
+      setLoading(true)
     } catch (error) {
       console.error('Error fetching posts:', error);
       setError('Error fetching posts. Please try again.'); // Set error message
@@ -70,11 +75,14 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className="max-w-md mx-auto p-4 bg-white shadow-md rounded-lg">
+    <div className="w-full max-w-screen-lg mx-auto px-2 py-4 bg-white shadow-md rounded-lg">
       <h1 className="text-xl font-semibold mb-4 text-center">Add a New Task</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="text-xl block text-gray-700 font-medium mb-2 text-center" htmlFor="title">
+          <label
+            className="text-xl block text-gray-700 font-medium mb-2 text-center"
+            htmlFor="title"
+          >
             Task
           </label>
           <input
@@ -97,32 +105,42 @@ const Dashboard = () => {
       {loading && <p className="text-center text-gray-500">Loading posts...</p>} {/* Loading indicator */}
       {error && <p className="text-red-500 text-center">{error}</p>} {/* Error message */}
 
-      <h2 className="text-lg font-semibold mt-4">Current Tasks</h2>
-      <ul className="space-y-2 mt-2">
-        {posts?.length > 0 ? (
-          posts?.map((post) => (
-            <li key={post?._id} className="flex justify-between p-2 border border-gray-200 rounded-md">
-              <span>{post?.title}</span>
-              <span
-                onClick={() => handleMarkAsDone(post?._id)} // Handle click to mark as done
-                className={`cursor-pointer ${post?.done ? 'text-green-500' : 'text-red-500'}`}
+      <h2 className="text-lg font-semibold mt-4 text-center">Current Tasks</h2>
+
+      {/* Task List */}
+      {!loading ? (
+        <ul className="space-y-2 mt-2 grid gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {posts?.length > 0 ? (
+            posts.map((post) => (
+              <li
+                key={post?._id}
+                className="flex items-center justify-between p-2 border border-gray-200 rounded-md"
               >
-                {post?.done ? '✓' : '✗'}
-              </span>
-              <button
-                  onClick={() => handleDeletePost(post._id)}  // Handle delete action
+                <span>{post?.title}</span>
+                <span
+                  onClick={() => handleMarkAsDone(post?._id)}
+                  className={`cursor-pointer ${post?.done ? 'text-green-500' : 'text-red-500'
+                    }`}
+                >
+                  {post?.done ? '✓' : '✗'}
+                </span>
+                <button
+                  onClick={() => handleDeletePost(post?._id)}
                   className="text-red-500 hover:text-red-700 transition duration-200"
                 >
                   Delete
                 </button>
-            </li>
-          ))
-        ) : (
-          <p className="text-center text-gray-500">No tasks found.</p>
-        )}
-      </ul>
-      
+              </li>
+            ))
+          ) : (
+            <p className="text-center text-gray-500 col-span-full">No tasks found.</p>
+          )}
+        </ul>
+      ) : (
+        <Loader />
+      )}
     </div>
+
   );
 };
 
