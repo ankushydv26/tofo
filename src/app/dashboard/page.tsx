@@ -75,71 +75,88 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className="w-full max-w-screen-lg mx-auto px-2 py-4 bg-white shadow-md rounded-lg">
-      <h1 className="text-xl font-semibold mb-4 text-center">Add a New Task</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label
-            className="text-xl block text-gray-700 font-medium mb-2 text-center"
-            htmlFor="title"
-          >
-            Task
-          </label>
-          <input
-            name="task"
-            type="text"
-            required
-            value={task}
-            onChange={(e) => setTask(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+    <div className="w-full max-w-screen-lg mx-auto px-4 py-6 bg-white shadow-md rounded-lg">
+  {/* Image and Heading */}
+  <div className="flex flex-col items-center">
+    <img
+      className="w-16 h-16 mb-2"
+      src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/756881/laptop.svg"
+      alt="To-Do List"
+    />
+    <h1 className="text-2xl font-bold text-gray-800 mb-4">To-Do List</h1>
+  </div>
+
+  {/* Form */}
+  <form onSubmit={handleSubmit} className="space-y-4">
+    <div>
+      <label
+        className="block text-lg font-medium text-gray-700 mb-2 text-center font-gochi"
+        htmlFor="title"
+      >
+        ~ Today I need to ~
+      </label>
+      <div className="flex items-center gap-2">
+        <input
+          name="task"
+          type="text"
+          required
+          value={task}
+          onChange={(e) => setTask(e.target.value)}
+          className="flex-grow p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter your task"
+        />
         <button
           type="submit"
-          className="w-full py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-200"
+          className="py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-200"
         >
           Submit
         </button>
-      </form>
-
-      {loading && <p className="text-center text-gray-500">Loading posts...</p>} {/* Loading indicator */}
-      {error && <p className="text-red-500 text-center">{error}</p>} {/* Error message */}
-
-      <h2 className="text-lg font-semibold mt-4 text-center">Current Tasks</h2>
-
-      {/* Task List */}
-      {!loading ? (
-        <ul className="space-y-2 mt-2 grid gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {posts?.length > 0 ? (
-            posts.map((post) => (
-              <li
-                key={post?._id}
-                className="flex items-center justify-between p-2 border border-gray-200 rounded-md"
-              >
-                <span>{post?.title}</span>
-                <span
-                  onClick={() => handleMarkAsDone(post?._id)}
-                  className={`cursor-pointer ${post?.done ? 'text-green-500' : 'text-red-500'
-                    }`}
-                >
-                  {post?.done ? '✓' : '✗'}
-                </span>
-                <button
-                  onClick={() => handleDeletePost(post?._id)}
-                  className="text-red-500 hover:text-red-700 transition duration-200"
-                >
-                  Delete
-                </button>
-              </li>
-            ))
-          ) : (
-            <p className="text-center text-gray-500 col-span-full">No tasks found.</p>
-          )}
-        </ul>
-      ) : (
-        <Loader />
-      )}
+      </div>
     </div>
+  </form>
+
+  {/* Loading and Error Messages */}
+  {loading && <p className="text-center text-gray-500">Loading tasks...</p>}
+  {error && <p className="text-red-500 text-center">{error}</p>}
+
+  {/* Current Tasks Heading */}
+  <h2 className="text-xl font-semibold mt-6 text-center font-gochi">Current Tasks</h2>
+
+  {/* Task List */}
+  {!loading ? (
+    <ul className="space-y-2 mt-4 grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      {posts?.length > 0 ? (
+        posts.map((post) => (
+          <li
+            key={post?._id}
+            className="flex items-center justify-between p-4 border border-gray-200 rounded-md bg-gray-50"
+          >
+            <span className="text-gray-800 font-medium font-gochi">{post?.title}</span>
+            <div className="flex items-center gap-2">
+              <span
+                onClick={() => handleMarkAsDone(post?._id)}
+                className={`cursor-pointer text-lg ${post?.done ? 'text-green-500' : 'text-red-500'}`}
+              >
+                {post?.done ? '✓' : '✗'}
+              </span>
+              <button
+                onClick={() => handleDeletePost(post?._id)}
+                className="text-red-500 hover:text-red-700 transition duration-200"
+              >
+                Delete
+              </button>
+            </div>
+          </li>
+        ))
+      ) : (
+        <p className="text-center text-gray-500 col-span-full">No tasks found.</p>
+      )}
+    </ul>
+  ) : (
+    <Loader />
+  )}
+</div>
+
 
   );
 };
